@@ -12,7 +12,8 @@ source:
     - dill_0.3.6.patch # dill was temporarily pinned upstream to <0.3.6 due to delay in it's release. Patch to allow 0.3.6.
 
 build:
-  skip: true  # [py<38]
+  # s390x is missing pyarrow atm 
+  skip: true  # [py<38 or s390x] 
   entry_points:
     - datasets-cli=datasets.commands.datasets_cli:main
   number: 0
