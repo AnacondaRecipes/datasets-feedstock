@@ -8,6 +8,8 @@ package:
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: 05d27d5966f35c2d51f5dbe07b2156cc30adc1e5c744f89947d18bb8244388ea
+  patches:
+    - dill_0.3.6.patch # dill was temporarily pinned upstream to <0.3.6 due to delay in it's release. Patch to allow 0.3.6.
 
 build:
   skip: true  # [py<38]
@@ -22,6 +24,9 @@ requirements:
     - pip
     - setuptools
     - wheel
+  build:
+    - m2-patch  # [win]
+    - patch  # [not win]
   run:
     - python
     - numpy >=1.17
