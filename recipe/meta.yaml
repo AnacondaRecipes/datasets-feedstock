@@ -10,40 +10,46 @@ source:
   sha256: 05d27d5966f35c2d51f5dbe07b2156cc30adc1e5c744f89947d18bb8244388ea
 
 build:
-  noarch: python
+  skip: true  # [py<38]
+  entry_points:
+    - datasets-cli=datasets.commands.datasets_cli:main
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv
 
 requirements:
   host:
-    - python >=3.6
+    - python
     - pip
+    - setuptools
+    - wheel
   run:
-    - aiohttp
-    - conllu
-    - dataclasses
-    - dill
-    - fsspec
-    - huggingface_hub <0.1.0
-    - importlib_metadata
-    - lxml
-    - multiprocess
+    - python
     - numpy >=1.17
-    - openpyxl
-    - packaging
+    - pyarrow >=6.0.0
+    - dill <0.3.7
     - pandas
-    - py7zr
-    - pyarrow >=0.17.1
-    - python >=3.6
-    - python-xxhash
     - requests >=2.19.0
-    - tqdm >=4.27,<4.50.0
+    - tqdm >=4.62.1
+    - python-xxhash
+    - multiprocess
+    - importlib-metadata  # [py<38]
+    - fsspec >=2021.11.1
+    - aiohttp
+    - huggingface_hub >=0.2.0,<1.0.0
+    - packaging
+    - responses <0.19
+    - pyyaml >=5.1
 
 test:
   imports:
     - datasets
     - datasets.commands
     - datasets.utils
+  commands:
+    - pip check
+    - datasets-cli --help
+  requires:
+    - pip
 
 about:
   home: https://github.com/huggingface/datasets
