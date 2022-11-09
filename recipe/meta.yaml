@@ -58,12 +58,16 @@ test:
 
 about:
   home: https://github.com/huggingface/datasets
+  summary: HuggingFace community-driven open-source library of datasets
+  description: |
+    Datasets is a lightweight library providing two main features:
+
+    - one-line dataloaders for many public datasets: one-liners to download and pre-process any of the number of datasets major public datasets (text datasets in 467 languages and dialects, image datasets, audio datasets, etc.) provided on the HuggingFace Datasets Hub. With a simple command like squad_dataset = load_dataset("squad"), get any of these datasets ready to use in a dataloader for training/evaluating a ML model (Numpy/Pandas/PyTorch/TensorFlow/JAX),
+    - efficient data pre-processing: simple, fast and reproducible data pre-processing for the above public datasets as well as your own local datasets in CSV/JSON/text/PNG/JPEG/etc. With simple commands like `processed_dataset = dataset.map(process_example)`, efficiently prepare the dataset for inspection and ML model evaluation and training.
   license: Apache-2.0
   license_family: Apache
-  # License file manually packaged. See: https://github.com/huggingface/datasets/pull/1007
-  license_file: LICENSE
-  summary: HuggingFace/Datasets is an open library of NLP datasets.
-  doc_url: https://huggingface.co/docs/datasets/
+  license_file: LICENSE  
+  doc_url: https://huggingface.co/docs/datasets/index
   dev_url: https://github.com/huggingface/datasets
 
 extra:
@@ -73,3 +77,6 @@ extra:
     - thewchan
     - mxr-conda
     - wietsedv
+  skip-lints:
+    - missing_license_url
+    - missing_doc_source_url
