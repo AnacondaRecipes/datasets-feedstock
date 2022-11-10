@@ -20,14 +20,14 @@ build:
   script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv
 
 requirements:
+  build:
+    - m2-patch  # [win]
+    - patch  # [not win]
   host:
     - python
     - pip
     - setuptools
     - wheel
-  build:
-    - m2-patch  # [win]
-    - patch  # [not win]
   run:
     - python
     - numpy >=1.17
