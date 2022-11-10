@@ -13,7 +13,7 @@ source:
 
 build:
   # s390x is missing pyarrow atm 
-  skip: true  # [py<38 or s390x] 
+  skip: true  # [py<37 or s390x] 
   entry_points:
     - datasets-cli=datasets.commands.datasets_cli:main
   number: 0
