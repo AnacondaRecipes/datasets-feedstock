@@ -73,6 +73,3 @@ extra:
     - thewchan
     - mxr-conda
     - wietsedv
-  skip-lints:
-    - missing_license_url
-    - missing_doc_source_url
