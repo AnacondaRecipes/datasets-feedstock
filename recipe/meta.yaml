@@ -8,8 +8,6 @@ package:
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: e2764c90aa3af96450a9747a934b8893b121f79f58d89e123cb1a7046bb8e81e
-  # patches:
-    # - dill_0.3.6.patch # dill was temporarily pinned upstream to <0.3.6 due to delay in it's release. Patch to allow 0.3.6.
 
 build:
   # s390x is missing pyarrow atm 
@@ -20,9 +18,6 @@ build:
   script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv
 
 requirements:
-  build:
-    - m2-patch  # [win]
-    - patch  # [not win]
   host:
     - python
     - pip
