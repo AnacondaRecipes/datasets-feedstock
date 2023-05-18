@@ -15,7 +15,7 @@ build:
   entry_points:
     - datasets-cli=datasets.commands.datasets_cli:main
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
 
 requirements:
   host:
