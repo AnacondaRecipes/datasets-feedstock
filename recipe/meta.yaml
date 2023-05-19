@@ -1,5 +1,5 @@
 {% set name = "datasets" %}
-{% set version = "2.10.1" %}
+{% set version = "2.12.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: e2764c90aa3af96450a9747a934b8893b121f79f58d89e123cb1a7046bb8e81e
+  sha256: faf164c18a41bea51df3f369e872f8be5b84c12ea5f6393c3896f56038af1ea3
 
 build:
   # s390x is missing pyarrow atm 
@@ -15,7 +15,7 @@ build:
   entry_points:
     - datasets-cli=datasets.commands.datasets_cli:main
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
 
 requirements:
   host:
@@ -26,8 +26,8 @@ requirements:
   run:
     - python
     - numpy >=1.17
-    - pyarrow >=6.0.0
-    - dill <0.3.7
+    - pyarrow >=8.0.0
+    - dill >=0.3.0,<0.3.7
     - pandas
     - requests >=2.19.0
     - tqdm >=4.62.1
@@ -36,7 +36,7 @@ requirements:
     - importlib-metadata  # [py<38]
     - fsspec >=2021.11.1
     - aiohttp
-    - huggingface_hub >=0.2.0,<1.0.0
+    - huggingface_hub >=0.11.0,<1.0.0
     - packaging
     - responses <0.19
     - pyyaml >=5.1
