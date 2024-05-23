@@ -53,8 +53,7 @@ test:
     - datasets.commands
     - datasets.utils
   commands:
-    # disabling pip check due to pyarrow_hotfix not being present
-    # - pip check
+    - pip check
     - datasets-cli --help
   requires:
     - pip
