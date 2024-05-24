@@ -40,12 +40,18 @@ requirements:
     - tqdm >=4.62.1
     - python-xxhash
     - multiprocess
-    - importlib-metadata  # [py<38]
     - fsspec >=2023.1.0,<=2024.3.1
     - aiohttp
     - huggingface_hub >=0.21.2
     - packaging
     - pyyaml >=5.1
+  run_constrained:
+    - apache-beam >=2.26.0
+    - tensorflow-base >=2.6.0
+    - jax >=0.3.14
+    - jaxlib >=0.3.14
+    - soundfile >=0.12.1
+    - pillow >=6.2.1
 
 test:
   imports:
