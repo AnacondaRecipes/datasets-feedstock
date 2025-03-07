@@ -45,7 +45,7 @@ requirements:
     - jaxlib >=0.3.14
     - soundfile >=0.12.1
     - pillow >=9.4.0
-    - soxr >=5.1  # [py>3.8]
+    - soxr >=5.1  # [py>=39]
 
 test:
   imports:
