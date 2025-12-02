@@ -1,16 +1,16 @@
 {% set name = "datasets" %}
-{% set version = "3.3.2" %}
+{% set version = "4.4.1" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 20901a97da870fb80b407ccc45f034a7ac99accd07da897ed42f11641bdb8c6e
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 80322699aa8c0bbbdb7caa87906da689c3c2e29523cff698775c67f28fdab1fc
 
 build:
-  skip: true  # [py<38]
+  skip: true  # [py<39]
   entry_points:
     - datasets-cli=datasets.commands.datasets_cli:main
   number: 0
@@ -26,26 +26,33 @@ requirements:
     - python
     - filelock
     - numpy >=1.17
-    - pyarrow >=15.0.0
-    - dill >=0.3.0,<0.3.9
+    - pyarrow >=21.0.0
+    - dill >=0.3.0,<0.4.1
     - pandas
     - requests >=2.32.2
     - tqdm >=4.66.3
     - python-xxhash
-    - multiprocess <0.70.17
-    - fsspec >=2023.1.0,<=2024.12.0
+    - multiprocess <0.70.19
+    - fsspec >=2023.1.0,<=2025.10.0
     - aiohttp
     - huggingface_hub >=0.24.0
     - packaging
     - pyyaml >=5.1
+    - httpx <1.0.0
+    - huggingface-hub >=0.25.0,<2.0
   run_constrained:
     - apache-beam >=2.26.0
     - tensorflow-base >=2.6.0
     - jax >=0.3.14
     - jaxlib >=0.3.14
     - soundfile >=0.12.1
-    - pillow >=9.4.0
+    - Pillow >=9.4.0
     - soxr >=5.1  # [py>=39]
+    - torchcodec >=0.6.0
+    - pytorch >=2.8.0
+    - tensorflow >=2.6.0
+    - nibabel >=5.3.2
+    - pdfplumber >=0.11.4
 
 test:
   imports:
@@ -68,7 +75,7 @@ about:
     - efficient data pre-processing: simple, fast and reproducible data pre-processing for the above public datasets as well as your own local datasets in CSV/JSON/text/PNG/JPEG/etc. With simple commands like `processed_dataset = dataset.map(process_example)`, efficiently prepare the dataset for inspection and ML model evaluation and training.
   license: Apache-2.0
   license_family: Apache
-  license_file: LICENSE  
+  license_file: LICENSE
   doc_url: https://huggingface.co/docs/datasets/index
   dev_url: https://github.com/huggingface/datasets
 
