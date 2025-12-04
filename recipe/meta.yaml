@@ -105,6 +105,10 @@ requirements:
 # E   RuntimeError: One of the subprocesses has abruptly died during map operation.To debug the error, disable multiprocessing.
 {% set deselect_tests = " --deselect=tests/test_upstream_hub.py::TestPushToHub::test_push_dataset_dict_to_hub_num_proc" %}
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_upstream_hub.py::TestPushToHub::test_push_dataset_dict_to_hub_iterable_num_proc" %}
+# >   raise TypeError("Passing coroutines is forbidden, use tasks explicitly.")
+# E   TypeError: Passing coroutines is forbidden, use tasks explicitly.
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_distributed.py::test_torch_distributed_run" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_distributed.py::test_torch_distributed_run_streaming_with_num_workers" %}
 test:
   source_files:
     - tests
