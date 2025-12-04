@@ -109,6 +109,9 @@ requirements:
 # E   TypeError: Passing coroutines is forbidden, use tasks explicitly.
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_distributed.py::test_torch_distributed_run" %}
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_distributed.py::test_torch_distributed_run_streaming_with_num_workers" %}
+# >   os.symlink("..", directory / "subdir", target_is_directory=True)
+# E   OSError: [WinError 1314] A required privilege is not held by the client
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_extract.py::test_tar_extract_insecure_files" %}  # [win]
 test:
   source_files:
     - tests
