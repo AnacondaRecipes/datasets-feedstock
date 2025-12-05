@@ -1,20 +1,20 @@
 {% set name = "datasets" %}
-{% set version = "3.3.2" %}
+{% set version = "4.4.1" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 20901a97da870fb80b407ccc45f034a7ac99accd07da897ed42f11641bdb8c6e
+  url: https://github.com/huggingface/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
+  sha256: 9ba524183ff8d82a0fba418a80c45e0d120e391e8401bfc7196ebe956e53d27c
 
 build:
-  skip: true  # [py<38]
-  entry_points:
-    - datasets-cli=datasets.commands.datasets_cli:main
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
+  entry_points:
+    - datasets-cli=datasets.commands.datasets_cli:main
+  skip: true  # [py<39]
 
 requirements:
   host:
@@ -26,37 +26,144 @@ requirements:
     - python
     - filelock
     - numpy >=1.17
-    - pyarrow >=15.0.0
-    - dill >=0.3.0,<0.3.9
+    - pyarrow >=21.0.0
+    - dill >=0.3.0,<0.4.1
     - pandas
     - requests >=2.32.2
+    - httpx <1.0.0
     - tqdm >=4.66.3
     - python-xxhash
-    - multiprocess <0.70.17
-    - fsspec >=2023.1.0,<=2024.12.0
-    - aiohttp
-    - huggingface_hub >=0.24.0
+    - multiprocess <0.70.19
+    # fsspec[http]
+    - fsspec >=2023.1.0,<=2025.10.0
+    - aiohttp !=4.0.0a0,!=4.0.0a1
+    - huggingface_hub >=0.25.0,<2.0
     - packaging
     - pyyaml >=5.1
   run_constrained:
-    - apache-beam >=2.26.0
-    - tensorflow-base >=2.6.0
+    # AUDIO_REQUIRE
+    - torchcodec >=0.6.0
+    #- pytorch >=2.8.0
+    # VISION_REQUIRE
+    - pillow >=9.4.0
+    # BENCHMARKS_REQUIRE
+    #- tensorflow-base ==2.12.0
+    #- pytorch ==2.0.1
+    - transformers >=4.30.1
+    # QUALITY_REQUIRE
+    - ruff >=0.3.0
+    # PDFS_REQUIRE
+    - pdfplumber >=0.11.4
+    # NIBABEL_REQUIRE
+    - nibabel >=5.3.2
+    # jax
     - jax >=0.3.14
     - jaxlib >=0.3.14
-    - soundfile >=0.12.1
-    - pillow >=9.4.0
-    - soxr >=5.1  # [py>=39]
+    # tensorflow_gpu
+    #- tensorflow-base >=2.6.0
 
+# Very long tests execution, run only test list from pypi:
+{% set test_files = [
+    "tests/test_arrow_dataset.py",
+    "tests/test_arrow_reader.py",
+    "tests/test_arrow_writer.py",
+    "tests/test_builder.py",
+    "tests/test_data_files.py",
+    "tests/test_dataset_dict.py",
+    "tests/test_dataset_list.py",
+    "tests/test_distributed.py",
+    "tests/test_download_manager.py",
+    "tests/test_exceptions.py",
+    "tests/test_experimental.py",
+    "tests/test_extract.py",
+    "tests/test_file_utils.py",
+    "tests/test_filelock.py",
+    "tests/test_filesystem.py",
+    "tests/test_fingerprint.py",
+    "tests/test_formatting.py",
+    "tests/test_hub.py",
+    "tests/test_info.py",
+    "tests/test_info_utils.py",
+    "tests/test_inspect.py",
+    "tests/test_iterable_dataset.py",
+    "tests/test_load.py",
+    "tests/test_metadata_util.py",
+    "tests/test_offline_util.py",
+    "tests/test_parallel.py",
+    "tests/test_patching.py",
+    "tests/test_py_utils.py",
+    "tests/test_search.py",
+    "tests/test_sharding_utils.py",
+    "tests/test_splits.py",
+    "tests/test_streaming_download_manager.py",
+    "tests/test_table.py",
+    "tests/test_tqdm.py",
+    "tests/test_upstream_hub.py",
+    "tests/test_version.py"
+] %}
+# >   raise RuntimeError( "One of the subprocesses has abruptly died during map operation." "To debug the error, disable multiprocessing.")
+# E   RuntimeError: One of the subprocesses has abruptly died during map operation.To debug the error, disable multiprocessing.
+{% set deselect_tests = " --deselect=tests/test_upstream_hub.py::TestPushToHub::test_push_dataset_dict_to_hub_num_proc" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_upstream_hub.py::TestPushToHub::test_push_dataset_dict_to_hub_iterable_num_proc" %}
+# >   raise TypeError("Passing coroutines is forbidden, use tasks explicitly.")
+# E   TypeError: Passing coroutines is forbidden, use tasks explicitly.
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_distributed.py::test_torch_distributed_run" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_distributed.py::test_torch_distributed_run_streaming_with_num_workers" %}
+# >   os.symlink("..", directory / "subdir", target_is_directory=True)
+# E   OSError: [WinError 1314] A required privilege is not held by the client
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_extract.py::test_tar_extract_insecure_files" %}  # [win]
 test:
+  source_files:
+    - tests
+    - src
   imports:
     - datasets
     - datasets.commands
     - datasets.utils
+    - datasets.arrow_dataset
+    - datasets.arrow_reader
+    - datasets.arrow_writer
+    - datasets.builder
+    - datasets.combine
+    - datasets.config
+    - datasets.data_files
+    - datasets.dataset_dict
+    - datasets.distributed
+    - datasets.download
+    - datasets.exceptions
+    - datasets.features
+    - datasets.filesystems
+    - datasets.fingerprint
+    - datasets.formatting
+    - datasets.hub
+    - datasets.info
+    - datasets.inspect
+    - datasets.io
+    - datasets.iterable_dataset
+    - datasets.keyhash
+    - datasets.load
+    - datasets.naming
+    - datasets.packaged_modules
+    - datasets.parallel
+    - datasets.search
+    - datasets.splits
+    - datasets.streaming
+    - datasets.table
   commands:
     - pip check
     - datasets-cli --help
+    - pytest -v {{ test_files | join(' ') }} {{ deselect_tests }}
   requires:
     - pip
+    - pytest
+    - zstandard
+    - decorator
+    - absl-py
+    - pyspark >=3.4
+    - openjdk 17.*
+    - h5py
+    - pytorch-cpu
+    - pillow >=9.4.0
 
 about:
   home: https://github.com/huggingface/datasets
