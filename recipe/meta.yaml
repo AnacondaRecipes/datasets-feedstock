@@ -49,7 +49,7 @@ requirements:
     # BENCHMARKS_REQUIRE
     #- tensorflow-base ==2.12.0
     #- pytorch ==2.0.1
-    - transformers ==4.30.1
+    - transformers >=4.30.1
     # QUALITY_REQUIRE
     - ruff >=0.3.0
     # PDFS_REQUIRE
@@ -120,6 +120,35 @@ test:
     - datasets
     - datasets.commands
     - datasets.utils
+    - datasets.arrow_dataset
+    - datasets.arrow_reader
+    - datasets.arrow_writer
+    - datasets.builder
+    - datasets.combine
+    - datasets.config
+    - datasets.data_files
+    - datasets.dataset_dict
+    - datasets.distributed
+    - datasets.download
+    - datasets.exceptions
+    - datasets.features
+    - datasets.filesystems
+    - datasets.fingerprint
+    - datasets.formatting
+    - datasets.hub
+    - datasets.info
+    - datasets.inspect
+    - datasets.io
+    - datasets.iterable_dataset
+    - datasets.keyhash
+    - datasets.load
+    - datasets.naming
+    - datasets.packaged_modules
+    - datasets.parallel
+    - datasets.search
+    - datasets.splits
+    - datasets.streaming
+    - datasets.table
   commands:
     - pip check
     - datasets-cli --help
