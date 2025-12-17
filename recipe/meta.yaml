@@ -10,7 +10,7 @@ source:
   sha256: 9ba524183ff8d82a0fba418a80c45e0d120e391e8401bfc7196ebe956e53d27c
 
 build:
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
   entry_points:
     - datasets-cli=datasets.commands.datasets_cli:main
