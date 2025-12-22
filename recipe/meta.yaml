@@ -114,11 +114,11 @@ requirements:
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_extract.py::test_tar_extract_insecure_files" %}  # [win]
 
 # pytorch is not available for python 3.14
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_arrow_dataset.py" %}  # [py<314]
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py" %}  # [py<314]
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_arrow_dataset.py" %}  # [py==314]
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py" %}  # [py==314]
 # >       assert builder.cache_dir == builder_cache_dir.as_posix()  # old cache from 2.1
 # E       AssertionError: assert '/tmp/pytest-...04e3ac03a13a5' == '/tmp/pytest-...6925d64deea5d'
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}  # [py<314]
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}  # [py==314]
  
 test:
   source_files:
