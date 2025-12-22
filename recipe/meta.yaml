@@ -149,10 +149,6 @@ test:
     - datasets.splits
     - datasets.streaming
     - datasets.table
-  commands:
-    - pip check
-    - datasets-cli --help
-    - pytest -v {{ test_files | join(' ') }} {{ deselect_tests }}
   requires:
     - absl-py
     - decorator
@@ -162,9 +158,17 @@ test:
     - pyspark >=3.4
     - pytest
     - zstandard
+    # tests/utils.py:10: in <module>
+    # from distutils.util import strtobool
+    # E   ModuleNotFoundError: No module named 'distutils'
+    - setuptools  # [py==314]
     # Remove constraints on these packages when they will be available for Python 3.14 on the main channel.
     - h5py  # [py<314]
     - pytorch-cpu  # [py<314]
+  commands:
+    - pip check
+    - datasets-cli --help
+    - pytest -v {{ test_files | join(' ') }} {{ deselect_tests }}
 
 about:
   home: https://github.com/huggingface/datasets
