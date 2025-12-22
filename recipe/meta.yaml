@@ -154,16 +154,17 @@ test:
     - datasets-cli --help
     - pytest -v {{ test_files | join(' ') }} {{ deselect_tests }}
   requires:
+    - absl-py
+    - decorator
+    - openjdk 17.*
+    - pillow >=9.4.0
     - pip
+    - pyspark >=3.4
     - pytest
     - zstandard
-    - decorator
-    - absl-py
-    - pyspark >=3.4
-    - openjdk 17.*
-    - h5py
-    - pytorch-cpu
-    - pillow >=9.4.0
+    # Remove constraints on these packages when they will be available for Python 3.14 on the main channel.
+    - h5py  # [py<314]
+    - pytorch-cpu  # [py<314]
 
 about:
   home: https://github.com/huggingface/datasets
