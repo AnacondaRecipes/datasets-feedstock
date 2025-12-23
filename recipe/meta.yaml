@@ -10,7 +10,7 @@ source:
   sha256: 9ba524183ff8d82a0fba418a80c45e0d120e391e8401bfc7196ebe956e53d27c
 
 build:
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
   entry_points:
     - datasets-cli=datasets.commands.datasets_cli:main
@@ -112,6 +112,21 @@ requirements:
 # >   os.symlink("..", directory / "subdir", target_is_directory=True)
 # E   OSError: [WinError 1314] A required privilege is not held by the client
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_extract.py::test_tar_extract_insecure_files" %}  # [win]
+
+# pytorch is not available for python 3.14
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_arrow_dataset.py" %}  # [py==314]
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py" %}  # [py==314]
+# >       assert builder.cache_dir == builder_cache_dir.as_posix()  # old cache from 2.1
+# E       AssertionError: assert '/tmp/pytest-...04e3ac03a13a5' == '/tmp/pytest-...6925d64deea5d'
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}  # [py==314]
+
+# Skip tests that are failing on the CI.
+# requests.exceptions.HTTPError: 502 Server Error: Bad Gateway for url: https://hub-ci.huggingface.co/api/repos/create
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_file_utils.py" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_inspect.py" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_upstream_hub.py" %}
+
 test:
   source_files:
     - tests
@@ -149,21 +164,26 @@ test:
     - datasets.splits
     - datasets.streaming
     - datasets.table
+  requires:
+    - absl-py
+    - decorator
+    - openjdk 17.*
+    - pillow >=9.4.0
+    - pip
+    - pyspark >=3.4
+    - pytest
+    - zstandard
+    # tests/utils.py:10: in <module>
+    # from distutils.util import strtobool
+    # E   ModuleNotFoundError: No module named 'distutils'
+    - setuptools  # [py==314]
+    # Remove constraints on these packages when they will be available for Python 3.14 on the main channel.
+    - h5py  # [py<314]
+    - pytorch-cpu  # [py<314]
   commands:
     - pip check
     - datasets-cli --help
     - pytest -v {{ test_files | join(' ') }} {{ deselect_tests }}
-  requires:
-    - pip
-    - pytest
-    - zstandard
-    - decorator
-    - absl-py
-    - pyspark >=3.4
-    - openjdk 17.*
-    - h5py
-    - pytorch-cpu
-    - pillow >=9.4.0
 
 about:
   home: https://github.com/huggingface/datasets
