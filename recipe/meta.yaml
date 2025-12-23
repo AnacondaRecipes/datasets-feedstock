@@ -123,7 +123,7 @@ requirements:
 # Skip tests that are failing on the CI.
 # requests.exceptions.HTTPError: 502 Server Error: Bad Gateway for url: https://hub-ci.huggingface.co/api/repos/create
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_file_utils.py" %}
-{% set deselect_tests = deselect_tests + " --deselect= tests/test_inspect.py" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_inspect.py" %}
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_upstream_hub.py" %}
 
