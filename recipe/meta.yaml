@@ -119,7 +119,14 @@ requirements:
 # >       assert builder.cache_dir == builder_cache_dir.as_posix()  # old cache from 2.1
 # E       AssertionError: assert '/tmp/pytest-...04e3ac03a13a5' == '/tmp/pytest-...6925d64deea5d'
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}  # [py==314]
- 
+
+# Skip tests that are failing on the CI.
+# requests.exceptions.HTTPError: 502 Server Error: Bad Gateway for url: https://hub-ci.huggingface.co/api/repos/create
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_file_utils.py" %}
+{% set deselect_tests = deselect_tests + " --deselect= tests/test_inspect.py" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_upstream_hub.py" %}
+
 test:
   source_files:
     - tests
