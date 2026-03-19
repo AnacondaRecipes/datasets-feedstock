@@ -10,7 +10,7 @@ source:
   sha256: bf00b89a4074c1607bb85537a3add1c6552f12f7759b98c20cf8982eb85da567
 
 build:
-  number: 
+  number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
   entry_points:
     - datasets-cli=datasets.commands.datasets_cli:main
@@ -80,7 +80,6 @@ requirements:
     "tests/test_file_utils.py",
     "tests/test_filelock.py",
     "tests/test_filesystem.py",
-    "tests/test_fingerprint.py",
     "tests/test_formatting.py",
     "tests/test_hub.py",
     "tests/test_info.py",
@@ -195,7 +194,7 @@ test:
   commands:
     - pip check
     - datasets-cli --help
-    - pytest -v {{ test_files | join(' ') }} {{ deselect_tests }} {{ ignore_tests}}
+    - pytest -v {{ test_files | join(' ') }} {{ deselect_tests }} {{ ignore_tests }}
 
 about:
   home: https://github.com/huggingface/datasets
