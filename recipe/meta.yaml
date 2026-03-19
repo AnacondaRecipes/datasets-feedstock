@@ -128,6 +128,13 @@ requirements:
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_upstream_hub.py" %}
 
+# E   ValueError: Compression type zstd not supported
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_filesystem.py::test_compression_filesystems" %}  # [py<314]
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_streaming_download_manager.py::test_streaming_dl_manager_extract_all_supported_single_file_compression_types" %}  # [py<314]
+
+# E   AttributeError: module 'subprocess' has no attribute '_USE_VFORK'
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_serialization" %}  # [py==314]
+
 test:
   source_files:
     - tests
