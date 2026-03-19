@@ -136,8 +136,41 @@ requirements:
 
 # E   httpx.ReadTimeout: The read operation timed out - unstable test
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_hub.py::test_delete_from_hub" %}
+
 # E   ImportError: DLL load failed while importing _C: The specified procedure could not be found  - unstable test
 {% set ignore_tests = " --ignore=tests/test_fingerprint.py" %}
+
+# ImportError: DLL load failed while importing _C on Windows — PyTorch's C extension DLL can't load because a required Windows procedure (likely from a VS C++ runtime or CUDA DLL) is missing - cpu pytorch is used in the tests
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_arrow_dataset.py::test_dataset_to_iterable_dataset" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_arrow_dataset.py::test_dataset_with_torch_dataloader" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_builder.py::test_builder_as_streaming_dataset" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_iterable_dataset_dict_push_to_hub" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_iterable_filter" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_iterable_map" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_distributed.py::test_split_dataset_by_node_iterable" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_distributed.py::test_distributed_shuffle_iterable" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_iterable_dataset_vs_dataset_map" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_map_async" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_filter_async" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_iterable_dataset" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_sharded_iterable_dataset_torch_dataloader_parallel" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_concatenate_datasets" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_format_from_arrow" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_interleave_dataset_with_sharding" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_iterable_dataset_batch" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_decode" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::TestIterableColumn::test_simple_getitem" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::TestIterableColumn::test_chained_getitem" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::TestIterableColumn::test_getitem_for_batched_dataset" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_formatting.py::test_iterable_dataset_of_arrays_format" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_iterable_dataset" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_concatenate_datasets" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_interleave_datasets" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_with_format" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_map_array_are_not_converted_back_to_lists" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_format" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_pickle_after_many_transforms" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_resume_dataloader" %}
 
 test:
   source_files:
