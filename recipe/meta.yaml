@@ -156,7 +156,6 @@ test:
     - datasets.inspect
     - datasets.io
     - datasets.iterable_dataset
-    - datasets.keyhash
     - datasets.load
     - datasets.naming
     - datasets.packaged_modules
