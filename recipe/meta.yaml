@@ -135,6 +135,8 @@ requirements:
 # E   AttributeError: module 'subprocess' has no attribute '_USE_VFORK'
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_serialization" %}  # [py==314]
 
+# E   httpx.ReadTimeout: The read operation timed out - unstable test
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_hub.py::test_delete_from_hub" %}
 test:
   source_files:
     - tests
