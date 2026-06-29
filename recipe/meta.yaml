@@ -1,5 +1,5 @@
 {% set name = "datasets" %}
-{% set version = "4.8.2" %}
+{% set version = "4.8.4" %}
 
 package:
   name: {{ name }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/huggingface/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
-  sha256: bf00b89a4074c1607bb85537a3add1c6552f12f7759b98c20cf8982eb85da567
+  sha256: 68c698efa570726541a0a7ea43468210eefa35c17026c7d52e863cee5c6c1fa9
 
 build:
   number: 0
