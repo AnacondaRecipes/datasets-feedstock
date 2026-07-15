@@ -13,7 +13,7 @@ build:
   skip: true  # [py<38]
   entry_points:
     - datasets-cli=datasets.commands.datasets_cli:main
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
 
 requirements:
@@ -45,7 +45,7 @@ requirements:
     - jaxlib >=0.3.14
     - soundfile >=0.12.1
     - pillow >=9.4.0
-    - soxr >=5.1  # [py>3.8]
+    - soxr-python >=0.4.0  # [py>38]
 
 test:
   imports:
