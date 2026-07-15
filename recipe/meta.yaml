@@ -1,5 +1,5 @@
 {% set name = "datasets" %}
-{% set version = "4.8.4" %}
+{% set version = "4.3.0" %}
 
 package:
   name: {{ name }}
@@ -7,14 +7,16 @@ package:
 
 source:
   url: https://github.com/huggingface/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
-  sha256: 68c698efa570726541a0a7ea43468210eefa35c17026c7d52e863cee5c6c1fa9
+  sha256: 165abf45c292726efa436976254bbe5c00a22b21e7facecc6acc6f8441e31e97
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
   entry_points:
     - datasets-cli=datasets.commands.datasets_cli:main
-  skip: true  # [py<310]
+  # py>313: 4.3.0 requires multiprocess <0.70.17 and fsspec <=2025.9.0;
+  # neither has py3.14 builds on pkgs/main (multiprocess 0.70.15 / fsspec 2025.7.0 stop at py3.13).
+  skip: true  # [py<310 or py>313]
 
 requirements:
   host:
@@ -27,15 +29,15 @@ requirements:
     - filelock
     - numpy >=1.17
     - pyarrow >=21.0.0
-    - dill >=0.3.0,<0.4.2
+    - dill >=0.3.0,<0.4.1
     - pandas
     - requests >=2.32.2
     - httpx <1.0.0
     - tqdm >=4.66.3
     - python-xxhash
-    - multiprocess <0.70.20
+    - multiprocess <0.70.17
     # fsspec[http]
-    - fsspec >=2023.1.0,<=2026.2.0
+    - fsspec >=2023.1.0,<=2025.9.0
     - aiohttp !=4.0.0a0,!=4.0.0a1
     - huggingface_hub >=0.25.0,<2.0
     - packaging
@@ -54,9 +56,6 @@ requirements:
     - ruff >=0.3.0
     # PDFS_REQUIRE
     - pdfplumber >=0.11.4
-    # NIBABEL_REQUIRE
-    - nibabel >=5.3.2
-    - ipyniivue ==2.4.2
     # jax
     - jax >=0.3.14
     - jaxlib >=0.3.14
@@ -113,13 +112,6 @@ requirements:
 # E   OSError: [WinError 1314] A required privilege is not held by the client
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_extract.py::test_tar_extract_insecure_files" %}  # [win]
 
-# pytorch is not available for python 3.14
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_arrow_dataset.py" %}  # [py==314]
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py" %}  # [py==314]
-# >       assert builder.cache_dir == builder_cache_dir.as_posix()  # old cache from 2.1
-# E       AssertionError: assert '/tmp/pytest-...04e3ac03a13a5' == '/tmp/pytest-...6925d64deea5d'
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}  # [py==314]
-
 # Skip tests that are failing on the CI.
 # requests.exceptions.HTTPError: 502 Server Error: Bad Gateway for url: https://hub-ci.huggingface.co/api/repos/create
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_file_utils.py" %}
@@ -128,14 +120,17 @@ requirements:
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_upstream_hub.py" %}
 
 # E   ValueError: Compression type zstd not supported
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_filesystem.py::test_compression_filesystems" %}  # [py<314]
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_streaming_download_manager.py::test_streaming_dl_manager_extract_all_supported_single_file_compression_types" %}  # [py<314]
-
-# E   AttributeError: module 'subprocess' has no attribute '_USE_VFORK'
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_serialization" %}  # [py==314]
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_filesystem.py::test_compression_filesystems" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_streaming_download_manager.py::test_streaming_dl_manager_extract_all_supported_single_file_compression_types" %}
 
 # E   httpx.ReadTimeout: The read operation timed out - unstable test
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_hub.py::test_delete_from_hub" %}
+
+# py3.13 ntpath.isabs() no longer treats drive-less "/foo" as absolute, so fsspec resolves
+# it to "C:/foo" and the 4.3.0-era identity assertion fails; fixed upstream after 4.3.0
+# (same tests pass on win-64 py3.13 in this feedstock's 4.4.1/4.8.4 CI).
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_streaming_download_manager.py::test_streaming_dl_manager_download_dummy_path" %}  # [win and py==313]
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_streaming_download_manager.py::test_streaming_dl_manager_download_and_extract_no_extraction" %}  # [win and py==313]
 
 # E   ImportError: DLL load failed while importing _C: The specified procedure could not be found  - unstable test
 {% set ignore_tests = " --ignore=tests/test_fingerprint.py" %}
@@ -217,13 +212,8 @@ test:
     - pyspark >=3.4
     - pytest
     - zstandard
-    # tests/utils.py:10: in <module>
-    # from distutils.util import strtobool
-    # E   ModuleNotFoundError: No module named 'distutils'
-    - setuptools  # [py==314]
-    # Remove constraints on these packages when they will be available for Python 3.14 on the main channel.
-    - h5py  # [py<314]
-    - pytorch-cpu  # [py<314]
+    - h5py
+    - pytorch-cpu
   commands:
     - pip check
     - datasets-cli --help
