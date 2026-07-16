@@ -11,9 +11,13 @@ source:
 
 build:
   skip: true  # [py<38]
+  # datasets 3.3.2 pins multiprocess <0.70.17, which ceilings at py3.13 (no py3.14 build).
+  # The shipping bn0 artifact was py3.9-3.13; py3.14 only entered the CBC afterwards. Match
+  # that range rather than attempt a py3.14 build upstream 3.3.2 never supported.
+  skip: true  # [py>313]
   entry_points:
     - datasets-cli=datasets.commands.datasets_cli:main
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
 
 requirements:
@@ -45,7 +49,7 @@ requirements:
     - jaxlib >=0.3.14
     - soundfile >=0.12.1
     - pillow >=9.4.0
-    - soxr >=5.1  # [py>3.8]
+    - soxr-python >=0.4.0  # [py>38]
 
 test:
   imports:
