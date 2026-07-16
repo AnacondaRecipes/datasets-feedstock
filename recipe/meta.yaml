@@ -11,6 +11,10 @@ source:
 
 build:
   skip: true  # [py<38]
+  # datasets 3.3.2 pins multiprocess <0.70.17, which ceilings at py3.13 (no py3.14 build).
+  # The shipping bn0 artifact was py3.9-3.13; py3.14 only entered the CBC afterwards. Match
+  # that range rather than attempt a py3.14 build upstream 3.3.2 never supported.
+  skip: true  # [py>313]
   entry_points:
     - datasets-cli=datasets.commands.datasets_cli:main
   number: 1
