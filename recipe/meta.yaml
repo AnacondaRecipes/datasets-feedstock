@@ -1,13 +1,114 @@
 {% set name = "datasets" %}
-{% set version = "4.8.4" %}
+{% set version = "5.0.1" %}
+{% set test_files = [
+  "tests/test_arrow_dataset.py",
+  "tests/test_arrow_reader.py",
+  "tests/test_arrow_writer.py",
+  "tests/test_builder.py",
+  "tests/test_data_files.py",
+  "tests/test_dataset_dict.py",
+  "tests/test_dataset_list.py",
+  "tests/test_distributed.py",
+  "tests/test_download_manager.py",
+  "tests/test_exceptions.py",
+  "tests/test_experimental.py",
+  "tests/test_extract.py",
+  "tests/test_file_utils.py",
+  "tests/test_filelock.py",
+  "tests/test_filesystem.py",
+  "tests/test_formatting.py",
+  "tests/test_hub.py",
+  "tests/test_info.py",
+  "tests/test_info_utils.py",
+  "tests/test_inspect.py",
+  "tests/test_iterable_dataset.py",
+  "tests/test_load.py",
+  "tests/test_metadata_util.py",
+  "tests/test_offline_util.py",
+  "tests/test_parallel.py",
+  "tests/test_patching.py",
+  "tests/test_py_utils.py",
+  "tests/test_search.py",
+  "tests/test_sharding_utils.py",
+  "tests/test_splits.py",
+  "tests/test_streaming_download_manager.py",
+  "tests/test_table.py",
+  "tests/test_tqdm.py",
+  "tests/test_upstream_hub.py",
+  "tests/test_version.py"
+] %}
+{% set deselect_tests = " --deselect=tests/test_upstream_hub.py::TestPushToHub::test_push_dataset_dict_to_hub_num_proc" %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_upstream_hub.py::TestPushToHub::test_push_dataset_dict_to_hub_iterable_num_proc"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_distributed.py::test_torch_distributed_run"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_distributed.py::test_torch_distributed_run_streaming_with_num_workers"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_extract.py::test_tar_extract_insecure_files"' %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_arrow_dataset.py" %}  # [py==314]
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py" %}  # [py==314]
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}  # [py==314]
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_file_utils.py" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_inspect.py" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_upstream_hub.py" %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_filesystem.py::test_compression_filesystems"' %}  # [py<314]
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_streaming_download_manager.py::test_streaming_dl_manager_extract_all_supported_single_file_compression_types"' %}  # [py<314]
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_serialization"' %}  # [py==314]
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_hub.py::test_delete_from_hub"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_arrow_dataset.py::test_dataset_to_iterable_dataset"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_arrow_dataset.py::test_dataset_with_torch_dataloader"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_builder.py::test_builder_as_streaming_dataset"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_iterable_dataset_dict_push_to_hub"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_iterable_filter"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_iterable_map"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_distributed.py::test_split_dataset_by_node_iterable"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_distributed.py::test_distributed_shuffle_iterable"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_iterable_dataset_vs_dataset_map"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_map_async"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_filter_async"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_iterable_dataset"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_sharded_iterable_dataset_torch_dataloader_parallel"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_concatenate_datasets"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_format_from_arrow"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_interleave_dataset_with_sharding"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_iterable_dataset_batch"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_decode"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::TestIterableColumn::test_simple_getitem"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::TestIterableColumn::test_chained_getitem"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::TestIterableColumn::test_getitem_for_batched_dataset"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_formatting.py::test_iterable_dataset_of_arrays_format"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_iterable_dataset"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_concatenate_datasets"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_interleave_datasets"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_with_format"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_map_array_are_not_converted_back_to_lists"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_format"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_pickle_after_many_transforms"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_resume_dataloader"' %}
+{% set ignore_tests = " --ignore=tests/test_fingerprint.py" %}
 
+# Very long tests execution, run only test list from pypi:
+# >   raise RuntimeError( "One of the subprocesses has abruptly died during map operation." "To debug the error, disable multiprocessing.")
+# E   RuntimeError: One of the subprocesses has abruptly died during map operation.To debug the error, disable multiprocessing.
+# >   raise TypeError("Passing coroutines is forbidden, use tasks explicitly.")
+# E   TypeError: Passing coroutines is forbidden, use tasks explicitly.
+# >   os.symlink("..", directory / "subdir", target_is_directory=True)
+# E   OSError: [WinError 1314] A required privilege is not held by the client
+# pytorch is not available for python 3.14
+# >       assert builder.cache_dir == builder_cache_dir.as_posix()  # old cache from 2.1
+# E       AssertionError: assert '/tmp/pytest-...04e3ac03a13a5' == '/tmp/pytest-...6925d64deea5d'
+# Skip tests that are failing on the CI.
+# requests.exceptions.HTTPError: 502 Server Error: Bad Gateway for url: https://hub-ci.huggingface.co/api/repos/create
+# E   ValueError: Compression type zstd not supported
+# E   AttributeError: module 'subprocess' has no attribute '_USE_VFORK'
+# E   httpx.ReadTimeout: The read operation timed out - unstable test
+# E   ImportError: DLL load failed while importing _C: The specified procedure could not be found  - unstable test
+# ImportError: DLL load failed while importing _C on Windows — PyTorch's C extension DLL can't load because a required Windows procedure (likely from a VS C++ runtime or CUDA DLL) is missing - cpu pytorch is used in the tests
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://github.com/huggingface/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
-  sha256: 68c698efa570726541a0a7ea43468210eefa35c17026c7d52e863cee5c6c1fa9
+  sha256: edb00de52526f4ef9f48e270457b1f307fcb28a65712121bfb417115db96a7e6
 
 build:
   number: 0
@@ -35,7 +136,7 @@ requirements:
     - python-xxhash
     - multiprocess <0.70.20
     # fsspec[http]
-    - fsspec >=2023.1.0,<=2026.2.0
+    - fsspec >=2023.1.0,<=2026.6.0
     - aiohttp !=4.0.0a0,!=4.0.0a1
     - huggingface_hub >=0.25.0,<2.0
     - packaging
@@ -45,7 +146,7 @@ requirements:
     - torchcodec >=0.6.0
     #- pytorch >=2.8.0
     # VISION_REQUIRE
-    - pillow >=9.4.0
+    - Pillow >=9.4.0
     # BENCHMARKS_REQUIRE
     #- tensorflow-base ==2.12.0
     #- pytorch ==2.0.1
@@ -62,115 +163,10 @@ requirements:
     - jaxlib >=0.3.14
     # tensorflow_gpu
     #- tensorflow-base >=2.6.0
-
-# Very long tests execution, run only test list from pypi:
-{% set test_files = [
-    "tests/test_arrow_dataset.py",
-    "tests/test_arrow_reader.py",
-    "tests/test_arrow_writer.py",
-    "tests/test_builder.py",
-    "tests/test_data_files.py",
-    "tests/test_dataset_dict.py",
-    "tests/test_dataset_list.py",
-    "tests/test_distributed.py",
-    "tests/test_download_manager.py",
-    "tests/test_exceptions.py",
-    "tests/test_experimental.py",
-    "tests/test_extract.py",
-    "tests/test_file_utils.py",
-    "tests/test_filelock.py",
-    "tests/test_filesystem.py",
-    "tests/test_formatting.py",
-    "tests/test_hub.py",
-    "tests/test_info.py",
-    "tests/test_info_utils.py",
-    "tests/test_inspect.py",
-    "tests/test_iterable_dataset.py",
-    "tests/test_load.py",
-    "tests/test_metadata_util.py",
-    "tests/test_offline_util.py",
-    "tests/test_parallel.py",
-    "tests/test_patching.py",
-    "tests/test_py_utils.py",
-    "tests/test_search.py",
-    "tests/test_sharding_utils.py",
-    "tests/test_splits.py",
-    "tests/test_streaming_download_manager.py",
-    "tests/test_table.py",
-    "tests/test_tqdm.py",
-    "tests/test_upstream_hub.py",
-    "tests/test_version.py"
-] %}
-# >   raise RuntimeError( "One of the subprocesses has abruptly died during map operation." "To debug the error, disable multiprocessing.")
-# E   RuntimeError: One of the subprocesses has abruptly died during map operation.To debug the error, disable multiprocessing.
-{% set deselect_tests = " --deselect=tests/test_upstream_hub.py::TestPushToHub::test_push_dataset_dict_to_hub_num_proc" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_upstream_hub.py::TestPushToHub::test_push_dataset_dict_to_hub_iterable_num_proc" %}
-# >   raise TypeError("Passing coroutines is forbidden, use tasks explicitly.")
-# E   TypeError: Passing coroutines is forbidden, use tasks explicitly.
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_distributed.py::test_torch_distributed_run" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_distributed.py::test_torch_distributed_run_streaming_with_num_workers" %}
-# >   os.symlink("..", directory / "subdir", target_is_directory=True)
-# E   OSError: [WinError 1314] A required privilege is not held by the client
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_extract.py::test_tar_extract_insecure_files" %}  # [win]
-
-# pytorch is not available for python 3.14
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_arrow_dataset.py" %}  # [py==314]
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py" %}  # [py==314]
-# >       assert builder.cache_dir == builder_cache_dir.as_posix()  # old cache from 2.1
-# E       AssertionError: assert '/tmp/pytest-...04e3ac03a13a5' == '/tmp/pytest-...6925d64deea5d'
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}  # [py==314]
-
-# Skip tests that are failing on the CI.
-# requests.exceptions.HTTPError: 502 Server Error: Bad Gateway for url: https://hub-ci.huggingface.co/api/repos/create
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_file_utils.py" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_inspect.py" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_upstream_hub.py" %}
-
-# E   ValueError: Compression type zstd not supported
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_filesystem.py::test_compression_filesystems" %}  # [py<314]
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_streaming_download_manager.py::test_streaming_dl_manager_extract_all_supported_single_file_compression_types" %}  # [py<314]
-
-# E   AttributeError: module 'subprocess' has no attribute '_USE_VFORK'
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_serialization" %}  # [py==314]
-
-# E   httpx.ReadTimeout: The read operation timed out - unstable test
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_hub.py::test_delete_from_hub" %}
-
-# E   ImportError: DLL load failed while importing _C: The specified procedure could not be found  - unstable test
-{% set ignore_tests = " --ignore=tests/test_fingerprint.py" %}
-
-# ImportError: DLL load failed while importing _C on Windows — PyTorch's C extension DLL can't load because a required Windows procedure (likely from a VS C++ runtime or CUDA DLL) is missing - cpu pytorch is used in the tests
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_arrow_dataset.py::test_dataset_to_iterable_dataset" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_arrow_dataset.py::test_dataset_with_torch_dataloader" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_builder.py::test_builder_as_streaming_dataset" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_iterable_dataset_dict_push_to_hub" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_iterable_filter" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_iterable_map" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_distributed.py::test_split_dataset_by_node_iterable" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_distributed.py::test_distributed_shuffle_iterable" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_iterable_dataset_vs_dataset_map" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_map_async" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_filter_async" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_iterable_dataset" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_sharded_iterable_dataset_torch_dataloader_parallel" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_concatenate_datasets" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_format_from_arrow" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_interleave_dataset_with_sharding" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_iterable_dataset_batch" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_decode" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::TestIterableColumn::test_simple_getitem" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::TestIterableColumn::test_chained_getitem" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::TestIterableColumn::test_getitem_for_batched_dataset" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_formatting.py::test_iterable_dataset_of_arrays_format" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_iterable_dataset" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_concatenate_datasets" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_interleave_datasets" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_with_format" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_map_array_are_not_converted_back_to_lists" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_format" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_pickle_after_many_transforms" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_iterable_dataset.py::test_resume_dataloader" %}
+    - pytorch >=2.8.0
+    - tensorflow >=2.6.0
+    - trimesh >=4.10.0
+    - pyiceberg >=0.7.0
 
 test:
   source_files:
@@ -239,7 +235,7 @@ about:
     - efficient data pre-processing: simple, fast and reproducible data pre-processing for the above public datasets as well as your own local datasets in CSV/JSON/text/PNG/JPEG/etc. With simple commands like `processed_dataset = dataset.map(process_example)`, efficiently prepare the dataset for inspection and ML model evaluation and training.
   license: Apache-2.0
   license_family: Apache
-  license_file: LICENSE  
+  license_file: LICENSE
   doc_url: https://huggingface.co/docs/datasets/index
   dev_url: https://github.com/huggingface/datasets
 
