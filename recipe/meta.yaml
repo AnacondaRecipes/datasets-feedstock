@@ -1,13 +1,13 @@
 {% set name = "datasets" %}
-{% set version = "4.8.4" %}
+{% set version = "5.1.0" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://github.com/huggingface/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
-  sha256: 68c698efa570726541a0a7ea43468210eefa35c17026c7d52e863cee5c6c1fa9
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 1561347daa8841b51351ef2ad1647b4ee4af406852c0f7bd1df587ac1ca7888e
 
 build:
   number: 0
@@ -26,18 +26,17 @@ requirements:
     - python
     - filelock
     - numpy >=1.17
-    - pyarrow >=21.0.0
+    # Required by datasets; pyarrow must be available on win-arm64 first (PKG-17739).
+    - pyarrow >=24.0.0
     - dill >=0.3.0,<0.4.2
     - pandas
-    - requests >=2.32.2
-    - httpx <1.0.0
     - tqdm >=4.66.3
     - python-xxhash
     - multiprocess <0.70.20
     # fsspec[http]
-    - fsspec >=2023.1.0,<=2026.2.0
+    - fsspec >=2023.1.0,<=2026.7.0
     - aiohttp !=4.0.0a0,!=4.0.0a1
-    - huggingface_hub >=0.25.0,<2.0
+    - huggingface_hub >=1.31.0,<3.0
     - packaging
     - pyyaml >=5.1
   run_constrained:
@@ -49,7 +48,7 @@ requirements:
     # BENCHMARKS_REQUIRE
     #- tensorflow-base ==2.12.0
     #- pytorch ==2.0.1
-    - transformers >=4.30.1
+    - transformers >=4.42.0
     # QUALITY_REQUIRE
     - ruff >=0.3.0
     # PDFS_REQUIRE
@@ -60,6 +59,8 @@ requirements:
     # jax
     - jax >=0.3.14
     - jaxlib >=0.3.14
+    - trimesh >=4.10.0
+    - pyiceberg >=0.7.0
     # tensorflow_gpu
     #- tensorflow-base >=2.6.0
 
@@ -211,10 +212,10 @@ test:
   requires:
     - absl-py
     - decorator
-    - openjdk 17.*
+    - openjdk 17.*  # [not (win and arm64)]
     - pillow >=9.4.0
     - pip
-    - pyspark >=3.4
+    - pyspark >=3.4  # [not (win and arm64)]
     - pytest
     - zstandard
     # tests/utils.py:10: in <module>
@@ -222,7 +223,7 @@ test:
     # E   ModuleNotFoundError: No module named 'distutils'
     - setuptools  # [py==314]
     # Remove constraints on these packages when they will be available for Python 3.14 on the main channel.
-    - h5py  # [py<314]
+    - h5py  # [py<314 and not (win and arm64)]
     - pytorch-cpu  # [py<314]
   commands:
     - pip check
@@ -239,7 +240,7 @@ about:
     - efficient data pre-processing: simple, fast and reproducible data pre-processing for the above public datasets as well as your own local datasets in CSV/JSON/text/PNG/JPEG/etc. With simple commands like `processed_dataset = dataset.map(process_example)`, efficiently prepare the dataset for inspection and ML model evaluation and training.
   license: Apache-2.0
   license_family: Apache
-  license_file: LICENSE  
+  license_file: LICENSE
   doc_url: https://huggingface.co/docs/datasets/index
   dev_url: https://github.com/huggingface/datasets
 
