@@ -225,9 +225,8 @@ test:
     # from distutils.util import strtobool
     # E   ModuleNotFoundError: No module named 'distutils'
     - setuptools  # [py==314]
-    # Remove constraints on these packages when they will be available for Python 3.14 on the main channel.
-    - h5py  # [py<314]
-    - pytorch-cpu  # [py<314]
+    - h5py
+    - pytorch-cpu
   commands:
     - pip check
     - datasets-cli --help
