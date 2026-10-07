@@ -26,14 +26,14 @@ requirements:
     - python
     - filelock
     - numpy >=1.17
-    - pyarrow >=21.0.0
+    - pyarrow >=24.0.0
     - dill >=0.3.0,<0.4.2
     - pandas
     - tqdm >=4.66.3
     - python-xxhash
     - multiprocess <0.70.20
-    # fsspec[http]
     - fsspec >=2023.1.0,<=2026.7.0
+    # fsspec[http]
     - aiohttp !=4.0.0a0,!=4.0.0a1
     - huggingface_hub >=1.31.0,<3.0
     - packaging
@@ -45,7 +45,7 @@ requirements:
     # VISION_REQUIRE
     - pillow >=9.4.0
     # MESH_REQUIRE
-    - trimesh >=4.10.0
+    #- trimesh >=4.10.0
     # BENCHMARKS_REQUIRE
     #- tensorflow-base ==2.12.0
     #- pytorch ==2.0.1
@@ -57,13 +57,13 @@ requirements:
     # BIO_REQUIRE
     - biopython >=1.80
     # NIBABEL_REQUIRE
-    - nibabel >=5.3.2
-    - ipyniivue ==2.4.2
+    #- nibabel >=5.3.2
+    #- ipyniivue ==2.4.2
     # ICEBERG_REQUIRE
-    - pyiceberg >=0.7.0
+    #- pyiceberg >=0.7.0
     # jax
-    - jax >=0.3.14
-    - jaxlib >=0.3.14
+    - jax >=0.3.14  # [not win]
+    - jaxlib >=0.3.14  # [not win]
     # tensorflow_gpu
     #- tensorflow-base >=2.6.0
 
