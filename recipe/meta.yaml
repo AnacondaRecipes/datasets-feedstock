@@ -11,7 +11,11 @@ source:
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
+  script: 
+  # datasets 5 added large test data files (test 3D meshes), remove those to keep the filesize low.
+    - rm -f tests/features/data/test_mesh_stl.stl tests/features/data/test_mesh_glb.glb tests/features/data/test_mesh_ply.ply  # [unix]
+    - del /f /q tests\features\data\test_mesh_stl.stl tests\features\data\test_mesh_glb.glb tests\features\data\test_mesh_ply.ply  # [win]
+    - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
   entry_points:
     - datasets-cli=datasets.commands.datasets_cli:main
   skip: true  # [py<310]
