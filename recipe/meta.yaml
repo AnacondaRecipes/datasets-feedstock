@@ -117,10 +117,6 @@ requirements:
 # E   OSError: [WinError 1314] A required privilege is not held by the client
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_extract.py::test_tar_extract_insecure_files" %}  # [win]
 
-# >       assert builder.cache_dir == builder_cache_dir.as_posix()  # old cache from 2.1
-# E       AssertionError: assert '/tmp/pytest-...04e3ac03a13a5' == '/tmp/pytest-...6925d64deea5d'
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_load.py" %}  # [py==314]
-
 # Skip tests that are failing on the CI.
 # requests.exceptions.HTTPError: 502 Server Error: Bad Gateway for url: https://hub-ci.huggingface.co/api/repos/create
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_file_utils.py" %}
@@ -131,9 +127,6 @@ requirements:
 # E   ValueError: Compression type zstd not supported
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_filesystem.py::test_compression_filesystems" %}  # [py<314]
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_streaming_download_manager.py::test_streaming_dl_manager_extract_all_supported_single_file_compression_types" %}  # [py<314]
-
-# E   AttributeError: module 'subprocess' has no attribute '_USE_VFORK'
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_dataset_dict.py::DatasetDictTest::test_serialization" %}  # [py==314]
 
 # E   httpx.ReadTimeout: The read operation timed out - unstable test
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_hub.py::test_delete_from_hub" %}
