@@ -116,6 +116,9 @@ requirements:
 # >   os.symlink("..", directory / "subdir", target_is_directory=True)
 # E   OSError: [WinError 1314] A required privilege is not held by the client
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_extract.py::test_tar_extract_insecure_files" %}  # [win]
+# Skip flaky test on windows CI with py312
+# E   OSError: [WinError 1224] The requested operation cannot be performed on a file with a user-mapped section open
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_arrow_dataset.py::BaseDatasetTest::test_map_caching_on_disk" %}  # [win and py==312]
 
 # Skip tests that are failing on the CI.
 # requests.exceptions.HTTPError: 502 Server Error: Bad Gateway for url: https://hub-ci.huggingface.co/api/repos/create
