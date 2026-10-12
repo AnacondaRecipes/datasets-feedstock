@@ -221,9 +221,10 @@ test:
     # tests/utils.py:10: in <module>
     # from distutils.util import strtobool
     # E   ModuleNotFoundError: No module named 'distutils'
-    - setuptools  # [py==314]
-    - h5py
-    - pytorch-cpu
+    - setuptools   # [py>=314]
+    # python buildout constraints
+    - h5py         # [py<315]
+    - pytorch-cpu  # [py<315]
   commands:
     - pip check
     - datasets-cli --help
