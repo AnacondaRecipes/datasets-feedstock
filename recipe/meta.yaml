@@ -10,7 +10,7 @@ source:
   sha256: 37f5bc39644d7be87005f7e8daa0fa510933a9d44578b06cd1f042dce684a709
 
 build:
-  number: 0
+  number: 1
   script: 
   # since version 5.* large test data files (test 3D meshes) were added, remove those to keep the filesize low.
     - rm -f tests/features/data/test_mesh_stl.stl tests/features/data/test_mesh_glb.glb tests/features/data/test_mesh_ply.ply  # [unix]
@@ -212,10 +212,8 @@ test:
   requires:
     - absl-py
     - decorator
-    - openjdk 17.*
     - pillow >=9.4.0
     - pip
-    - pyspark >=3.4
     - pytest
     - zstandard
     # tests/utils.py:10: in <module>
@@ -223,8 +221,11 @@ test:
     # E   ModuleNotFoundError: No module named 'distutils'
     - setuptools   # [py>=314]
     # python buildout constraints
-    - h5py         # [py<315]
     - pytorch-cpu  # [py<315]
+    # disabled on win-arm64 due to the missing pkgs below for win-arm64 on main channel, remove those selector during the next rebuild/version bump once the win-arm64 pkgs will be available
+    - openjdk 17.*   # [not (win and arm64)]
+    - h5py           # [py<315 and not (win and arm64)]
+    - pyspark >=3.4  # [not (win and arm64)]
   commands:
     - pip check
     - datasets-cli --help
